@@ -8,47 +8,72 @@ const SOURCES = {
 const PER_PAGE = 16;
 
 // --- STATE ---
-let cache = {}; // Stores loaded JSON data to prevent re-fetching
-let currentCategory = "Instagram Viral"; // Default start category
+let cache = {};
+let currentCategory = "All"; // Default to All
 let currentVideos = [];
 let currentPage = 1;
 
-// ---------- LOAD CATEGORY ----------
-async function loadCategory(name) {
-    currentCategory = name;
-    currentPage = 1;
-    const url = SOURCES[name];
-
-    // Show loading state
+// ---------- FETCHING LOGIC ----------
+async function loadDataForCategory(category) {
     const grid = document.getElementById("videoGrid");
-    if(grid) grid.innerHTML = `<p style="color:white; text-align:center; padding:20px;">Loading ${name}...</p>`;
+    grid.innerHTML = `<div style="text-align:center; padding:20px; color:white;">Loading...</div>`;
 
     try {
-        // Fetch if not in cache
-        if (!cache[name]) {
-            const res = await fetch(url);
-            if (!res.ok) throw new Error(`Failed to load ${url}`);
-            cache[name] = await res.json();
+        let videosToShow = [];
+
+        // CASE 1: "All" - Fetch EVERYTHING
+        if (category === "All") {
+            const promises = Object.values(SOURCES).map(url => 
+                fetch(url).then(res => {
+                    if (!res.ok) throw new Error(`404: ${url}`);
+                    return res.json();
+                }).catch(err => {
+                    console.error("Skipping failed source:", url, err);
+                    return []; // Return empty array if one file fails so others still load
+                })
+            );
+
+            const results = await Promise.all(promises);
+            // Flatten array of arrays
+            videosToShow = results.flat();
+        
+        // CASE 2: Specific Category - Fetch ONE file
+        } else {
+            const url = SOURCES[category];
+            if (!cache[url]) {
+                const res = await fetch(url);
+                if (!res.ok) throw new Error(`File not found: ${url}`);
+                cache[url] = await res.json();
+            }
+            videosToShow = cache[url];
         }
 
-        // Apply Data
-        currentVideos = cache[name];
-        
-        // Update UI
-        updateCategoryUI();
+        // Check if empty
+        if (!videosToShow || videosToShow.length === 0) {
+            grid.innerHTML = `<div style="text-align:center; padding:20px; color:#ff4444;">
+                No videos found in ${category}. <br> 
+                <small>Check if <b>${SOURCES[category]}</b> exists and contains valid JSON.</small>
+            </div>`;
+            return;
+        }
+
+        currentVideos = videosToShow;
+        currentPage = 1;
         renderGrid();
 
     } catch (e) {
         console.error(e);
-        if(grid) grid.innerHTML = `<p style="color:red; text-align:center;">Error loading data. Check if <b>${url}</b> exists.</p>`;
+        grid.innerHTML = `<div style="text-align:center; padding:20px; color:#ff4444;">
+            Error: ${e.message}
+        </div>`;
     }
 }
 
 // ---------- CATEGORY BUTTONS UI ----------
-function updateCategoryUI() {
+function updateCategoryUI(selectedName) {
     const buttons = document.querySelectorAll('.cat-btn');
     buttons.forEach(b => {
-        if (b.innerText === currentCategory) {
+        if (b.innerText === selectedName) {
             b.classList.add('active');
         } else {
             b.classList.remove('active');
@@ -67,7 +92,7 @@ function renderGrid(customList = null) {
 
     let list = customList || currentVideos;
 
-    // Pagination
+    // Pagination Logic
     const totalPages = Math.ceil(list.length / PER_PAGE) || 1;
     if (currentPage > totalPages) currentPage = 1;
     if (currentPage < 1) currentPage = 1;
@@ -79,7 +104,7 @@ function renderGrid(customList = null) {
     grid.innerHTML = "";
 
     pageVideos.forEach(v => {
-        // Random Views Logic (as requested)
+        // Random Views Logic
         const randomViews = Math.floor(Math.random() * 900 + 100) + 'k';
 
         const d = document.createElement("div");
@@ -101,7 +126,6 @@ function renderGrid(customList = null) {
                 </div>
             </div>
         `;
-        // Navigate to watch page
         d.onclick = () => window.location.href = `watch.html?id=${v.id}`;
         grid.appendChild(d);
     });
@@ -119,17 +143,33 @@ function renderGrid(customList = null) {
     }
 }
 
-// ---------- INIT HEADER BUTTONS ----------
+// ---------- INIT HEADER ----------
 function initHeader() {
     const nav = document.getElementById("categoryTabs");
     if (!nav) return;
     nav.innerHTML = "";
 
+    // Add "All" Button
+    const allBtn = document.createElement("button");
+    allBtn.className = "cat-btn active";
+    allBtn.innerText = "All";
+    allBtn.onclick = () => {
+        currentCategory = "All";
+        updateCategoryUI("All");
+        loadDataForCategory("All");
+    };
+    nav.appendChild(allBtn);
+
+    // Add Category Buttons
     Object.keys(SOURCES).forEach(name => {
         const b = document.createElement("button");
         b.className = "cat-btn";
         b.innerText = name;
-        b.onclick = () => loadCategory(name);
+        b.onclick = () => {
+            currentCategory = name;
+            updateCategoryUI(name);
+            loadDataForCategory(name);
+        };
         nav.appendChild(b);
     });
 }
@@ -142,14 +182,15 @@ function initSearch() {
     s.oninput = (e) => {
         const q = e.target.value.toLowerCase();
         
-        // Search inside the CURRENT category array
         if (!q) {
             renderGrid();
             return;
         }
         
-        const results = currentVideos.filter(v => v.title.toLowerCase().includes(q));
-        currentPage = 1; // Reset page on search
+        const results = currentVideos.filter(v => 
+            (v.title && v.title.toLowerCase().includes(q))
+        );
+        currentPage = 1;
         renderGrid(results);
     };
 }
@@ -158,5 +199,5 @@ function initSearch() {
 document.addEventListener("DOMContentLoaded", () => {
     initHeader();
     initSearch();
-    loadCategory(currentCategory); // Load default category
+    loadDataForCategory("All"); // Start by loading ALL videos
 });
