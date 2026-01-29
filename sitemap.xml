@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset 
+ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+ xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+
+  <!-- Homepage -->
+  <url>
+    <loc>https://xshiver.site/</loc>
+    <priority>1.0</priority>
+    <changefreq>daily</changefreq>
+  </url>
+
+  <!-- Video Page Template -->
+  <url>
+    <loc>https://xshiver.site/watch.html?id=fucmaza-07-45instagram-viral-chasmish-girl-</loc>
+    <video:video>
+      <video:title>07:45 Instagram Viral Chasmish Girl</video:title>
+      <video:description>Video by Xshiver</video:description>
+      <video:thumbnail_loc>https://fuckmaza.com/wp-content/uploads/2026/01/ZKJUPiIaHL8GyOW3Ilvn_25_535e172ce9723cceefd154dce865f129_image.jpg</video:thumbnail_loc>
+      <video:content_loc>https://data.fucmaza.com/instagram-viral-chasmish-girl--viral.mp4</video:content_loc>
+      <video:duration>300</video:duration>
+      <video:family_friendly>no</video:family_friendly>
+      <video:publication_date>2026-01-28T17:08:07+00:00</video:publication_date>
+    </video:video>
+  </url>
+
+</urlset>
