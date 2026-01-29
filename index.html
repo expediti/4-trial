@@ -1,29 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>XShiver</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XSHIVER</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <header>
+        <h1>XSHIVER</h1>
+        <div class="search-bar">
+            <input type="text" placeholder="Search videos...">
+        </div>
+        <nav class="categories">
+            <a href="#" class="category active" data-category="all">All</a>
+            <a href="#" class="category" data-category="instagram">Instagram Viral</a>
+            <a href="#" class="category" data-category="indian">Indian Leaked</a>
+            <a href="#" class="category" data-category="telegram">Telegram Viral</a>
+        </nav>
+    </header>
 
-  <header class="topbar">
-    <div class="logo">XShiver</div>
-  </header>
+    <main>
+        <div class="video-grid" id="videoGrid">
+            <!-- Videos will be dynamically loaded here -->
+        </div>
 
-  <main class="container">
-    <section id="video-grid" class="grid"></section>
-  </main>
+        <div class="pagination">
+            <a href="/page1" class="page-link active">1</a>
+            <a href="/page2" class="page-link">2</a>
+            <a href="/page3" class="page-link">3</a>
+            <!-- Dynamic pagination links -->
+        </div>
+    </main>
 
-  <footer class="footer">
-    <span>© 2026 XShiver</span>
-  </footer>
+    <footer>
+        <div class="social-links">
+            <a href="https://instagram.com/yourusername" target="_blank">Instagram</a>
+            <a href="https://t.me/yourusername" target="_blank">Telegram</a>
+        </div>
+        <p>&copy; 2026 XSHIVER. All rights reserved.</p>
+    </footer>
 
-  <script src="script.js"></script>
+    <script src="app.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
