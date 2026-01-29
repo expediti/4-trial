@@ -17,26 +17,31 @@ body {
 
 header {
     background-color: var(--card-bg);
-    padding: 1rem;
-    text-align: center;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     border-bottom: 1px solid var(--border-color);
+    flex-wrap: wrap;
 }
 
 header h1 {
     margin: 0;
     color: var(--accent-color);
-    font-size: 2rem;
+    font-size: 1.8rem;
     text-shadow: var(--neon-glow);
+    flex: 1;
 }
 
 .search-bar {
-    margin: 1rem 0;
+    flex: 2;
+    margin: 0 1rem;
+    min-width: 200px;
 }
 
 .search-bar input {
+    width: 100%;
     padding: 0.5rem 1rem;
-    width: 80%;
-    max-width: 500px;
     border: none;
     border-radius: 20px;
     background-color: var(--border-color);
@@ -44,11 +49,27 @@ header h1 {
     border: 1px solid var(--accent-color);
 }
 
+.get-pro {
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    text-shadow: none;
+    box-shadow: var(--neon-glow);
+    transition: all 0.3s;
+}
+
+.get-pro:hover {
+    transform: scale(1.05);
+}
+
 .categories {
     display: flex;
     justify-content: center;
     gap: 1rem;
-    margin-bottom: 1rem;
+    margin: 1rem 0;
     flex-wrap: wrap;
 }
 
@@ -103,21 +124,22 @@ header h1 {
 .pagination {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 1rem;
     margin: 2rem 0;
 }
 
 .pagination button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
     background-color: var(--border-color);
     color: var(--text-color);
-    cursor: pointer;
     border: 1px solid var(--accent-color);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
 }
 
-.pagination button:not(:disabled):hover {
+.pagination button:hover:not(:disabled) {
     background-color: var(--accent-color);
     box-shadow: var(--neon-glow);
 }
@@ -128,19 +150,106 @@ header h1 {
 }
 
 footer {
-    text-align: center;
-    padding: 1rem;
+    background-color: var(--card-bg);
+    padding: 2rem 1rem 1rem;
     border-top: 1px solid var(--border-color);
     margin-top: 2rem;
 }
 
-.social-links {
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1.5rem;
     margin-bottom: 1rem;
 }
 
-.social-links a {
+.footer-section {
+    flex: 1;
+    min-width: 150px;
+}
+
+.footer-section h3 {
     color: var(--accent-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.footer-section a {
+    display: block;
+    color: var(--text-color);
     text-decoration: none;
-    margin: 0 0.5rem;
-    text-shadow: var(--neon-glow);
+    margin-bottom: 0.3rem;
+    transition: color 0.3s;
+}
+
+.footer-section a:hover {
+    color: var(--accent-color);
+}
+
+.social-icons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.social-icons a {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+    text-align: center;
+    line-height: 36px;
+    color: var(--bg-color);
+    text-decoration: none;
+    box-shadow: var(--neon-glow);
+    transition: transform 0.3s;
+}
+
+.social-icons a:hover {
+    transform: scale(1.1);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-color);
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        padding: 1rem;
+    }
+
+    header h1 {
+        margin-bottom: 1rem;
+    }
+
+    .search-bar {
+        order: 3;
+        width: 100%;
+        margin: 1rem 0;
+    }
+
+    .categories {
+        order: 4;
+        width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 0.5rem;
+    }
+
+    .categories button {
+        white-space: nowrap;
+    }
+
+    .footer-content {
+        flex-direction: column;
+    }
 }
