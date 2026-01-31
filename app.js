@@ -1,6 +1,6 @@
 // --- CONFIGURATION ---
 const SOURCES = {
-    "Instagram Viral": "data/fuckmaza.json",
+    //"Instagram Viral": "data/fuckmaza.json",
     "Indian Leaked": "data/bhojpuri.json",
     "Telegram Viral": "data/lol49.json"
 };
