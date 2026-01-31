@@ -62,7 +62,7 @@ if (grid) {
             </div>
             <div class="card-info">
                 <div class="card-title">${item.title}</div>
-                <button class="disk-btn">Get Now</button>
+                <button class="disk-btn">WATCH FULL VIDEO</button>
             </div>
         `;
         
