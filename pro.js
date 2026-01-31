@@ -7,28 +7,28 @@ const proVideos = [
     // --- ITEM 1 ---
     {
         image: "pro1.jpg",                  // Name of your image file
-        title: "Exclusive Leaked Pack 1",   // Title shown to user
-        link: "PASTE_DISK_WALA_LINK_HERE"   // Your Affiliate Link
+        title: "Subhashree Sahu Leaked 10+ videos",   // Title shown to user
+        link: "https://www.diskwala.com/app/697dacbd39857e10c605332b"   // Your Affiliate Link
     },
 
     // --- ITEM 2 ---
     {
         image: "pro2.jpg",
-        title: "Hidden Viral Video 2",
-        link: "PASTE_DISK_WALA_LINK_HERE"
+        title: "Milf girl leaked full",
+        link: "https://www.diskwala.com/app/697daa3039857e10c60523fc"
     },
 
     // --- ITEM 3 ---
     {
         image: "pro3.jpg",
-        title: "Premium Collection 3",
-        link: "PASTE_DISK_WALA_LINK_HERE"
+        title: "Mother sucking small dick",
+        link: "https://www.diskwala.com/app/697daa2f39857e10c60523d4"
     },
 
     // --- ITEM 4 (Copy this block to add more!) ---
     {
         image: "pro4.jpg",
-        title: "New Update Video",
+        title: "coming soon",
         link: "PASTE_DISK_WALA_LINK_HERE"
     }
 
