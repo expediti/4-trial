@@ -17,7 +17,7 @@ let xml =
 videos.forEach(v => {
   xml += `
 <url>
-  <loc>${base}/watch.html?title=${v.id}</loc>
+  <loc>${base}/watch.html?id=${v.id}</loc>
   <priority>0.9</priority>
   <changefreq>weekly</changefreq>
 </url>`;
