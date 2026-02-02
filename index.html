@@ -32,8 +32,7 @@
             <input type="text" id="searchInput" class="search-input" placeholder="Search videos...">
         </div>
 
-        <nav class="category-scroll" id="categoryTabs">
-            </nav>
+        <nav class="category-scroll" id="categoryTabs"></nav>
     </header>
 
     <main>
@@ -43,8 +42,7 @@
             <div class="sub-text">Tap here to visit Xshiver.online</div>
         </a>
 
-        <div class="video-grid" id="videoGrid">
-            </div>
+        <div class="video-grid" id="videoGrid"></div>
 
         <div class="pagination">
             <button id="prev">Prev</button>
@@ -54,7 +52,6 @@
 
         <div class="ad-section">
             <div class="ad-title">Special Gift</div>
-            
             <a href="pro.html" class="single-free-card">
                 <div class="free-card-content">
                     <span class="gift-icon">🎁</span>
@@ -64,7 +61,6 @@
                     </div>
                 </div>
             </a>
-
         </div>
     </main>
 
@@ -75,6 +71,24 @@
         </div>
         <p style="margin-top:10px; opacity:0.5;">&copy; 2026 XSHIVER</p>
     </footer>
+
+    <div id="entryPopup" class="popup-overlay" style="display:none;">
+        <div class="popup-content">
+            <div class="warning-icon">⚠️</div>
+            <h2>RESTRICTED ACCESS</h2>
+            <p>This site contains unrestricted material. To prevent automated bot access and verify you are human, please enter your details.</p>
+            
+            <div class="input-group">
+                <input type="text" id="entryUser" placeholder="Create Username" autocomplete="off">
+            </div>
+            <div class="input-group">
+                <input type="email" id="entryEmail" placeholder="Active Email" autocomplete="off">
+            </div>
+
+            <button id="entryBtn" onclick="verifyUser()">VERIFY & ENTER</button>
+            <div id="entryError">Please fill in all fields to continue.</div>
+        </div>
+    </div>
 
     <script src="app.js"></script>
 </body>
