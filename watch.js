@@ -1,55 +1,51 @@
-const id = new URLSearchParams(location.search).get("id");
+const VIDEO_FILE = "data.json";
 
-// List of all data files to check
-const DATA_FILES = [
-    "data/fuckmaza.json",
-    "data/bhojpuri.json",
-    "data/lol49.json"
-];
+// Get Video ID from URL
+const params = new URLSearchParams(window.location.search);
+const currentId = params.get("id");
 
 async function initWatch() {
-    if (!id) {
-        document.getElementById("title").innerText = "Video Not Found";
-        return;
+    // Basic checks
+    if (!currentId) { window.location.href = "index.html"; return; }
+    
+    // Set Canonical URL for SEO
+    let link = document.querySelector("link[rel='canonical']");
+    if (!link) {
+        link = document.createElement("link");
+        link.rel = "canonical";
+        document.head.appendChild(link);
     }
+    link.href = window.location.origin + "/watch.html?id=" + currentId;
 
     try {
-        let foundVideo = null;
-        let allVideos = [];
+        const res = await fetch(VIDEO_FILE);
+        const allVideos = await res.json();
 
-        // Fetch ALL files to ensure we find the ID and have suggestions
-        const promises = DATA_FILES.map(url => 
-            fetch(url)
-                .then(res => res.json())
-                .catch(err => {
-                    console.warn("Failed to load:", url);
-                    return []; // Continue even if one fails
-                })
-        );
+        // 1. FIND CURRENT VIDEO
+        const video = allVideos.find(v => v.id === currentId);
 
-        const results = await Promise.all(promises);
-        
-        // Merge all data
-        allVideos = results.flat();
-        
-        // Find the video
-        foundVideo = allVideos.find(v => v.id === id);
+        if (video) {
+            // -------- SEO & UI ----------
+            document.title = video.title + " - XSHIVER";
+            
+            // Meta Description
+            let descTag = document.querySelector('meta[name="description"]');
+            if (!descTag) {
+                descTag = document.createElement('meta');
+                descTag.name = "description";
+                document.head.appendChild(descTag);
+            }
+            descTag.content = `${video.title} on XSHIVER. Watch HD streaming online.`;
 
-        if (foundVideo) {
-            // Setup Player
-            const player = document.getElementById("player");
-            player.src = foundVideo.embedUrl;
-            player.poster = foundVideo.thumbnailUrl;
+            // UI Updates
+            document.getElementById("title").innerText = video.title;
+            document.getElementById("description").innerText = video.description || `Watch ${video.title} on XSHIVER.`;
 
-            // Setup Info
-            document.getElementById("title").innerText = foundVideo.title;
-            document.getElementById("description").innerText = foundVideo.description || "";
-
-            // Setup Tags
+            // Tags
             const tagBox = document.getElementById("tags");
             tagBox.innerHTML = "";
-            if (foundVideo.tags) {
-                foundVideo.tags.forEach(t => {
+            if (video.tags) {
+                video.tags.forEach(t => {
                     const s = document.createElement("span");
                     s.className = "tag-pill";
                     s.innerText = `#${t}`;
@@ -57,53 +53,81 @@ async function initWatch() {
                 });
             }
 
-            renderRelated(foundVideo, allVideos);
+            // -------- FLUID PLAYER SETUP (WITH AD) ----------
+            const playerElement = document.getElementById("mainPlayer");
+            
+            // 1. Set source manually first
+            playerElement.innerHTML = `<source src="${video.embedUrl}" type="video/mp4" />`;
+
+            // 2. Initialize Fluid Player
+            fluidPlayer("mainPlayer", {
+                layoutControls: {
+                    fillToContainer: true,
+                    posterImage: video.thumbnailUrl, // Video Thumbnail
+                    autoPlay: false, 
+                    playButtonShowing: true,
+                    playPauseAnimation: true,
+                    logo: {
+                        imageUrl: 'logo.svg', // Your logo inside player
+                        position: 'top right',
+                        clickUrl: 'index.html',
+                        opacity: 0.8
+                    }
+                },
+                vastOptions: {
+                    adList: [
+                        {
+                            roll: 'preRoll', // Play Ad before video
+                            vastTag: 'https://s.magsrv.com/v1/vast.php?idzone=5843716' // YOUR AD TAG
+                        }
+                    ]
+                }
+            });
+
         } else {
-            document.getElementById("title").innerText = "Video unavailable or deleted.";
+            document.getElementById("title").innerText = "Video not found.";
         }
+
+        // 2. LOAD SUGGESTIONS
+        const suggestions = allVideos
+            .filter(v => v.id !== currentId)
+            .sort(() => 0.5 - Math.random())
+            .slice(0, 12);
+
+        renderSuggestions(suggestions);
+
     } catch (e) {
-        console.error(e);
-        document.getElementById("title").innerText = "Error loading video.";
+        console.error("Error loading video:", e);
     }
 }
 
-function renderRelated(current, all) {
-    const list = document.getElementById("related");
-    list.innerHTML = "";
+// ---------------- SUGGESTIONS ----------------
+function renderSuggestions(list) {
+    const grid = document.getElementById("related");
+    grid.innerHTML = "";
 
-    // 1. Filter out current video
-    // 2. Shuffle
-    // 3. Take 10
-    const suggestions = all
-        .filter(v => v.id !== current.id)
-        .sort(() => 0.5 - Math.random())
-        .slice(0, 10);
+    list.forEach(item => {
+        let thumb = item.thumbnailUrl;
+        if (thumb.includes("data:image"))
+            thumb = "https://placehold.co/600x400/1a1a24/FFF?text=No+Preview";
 
-    suggestions.forEach(v => {
-        // Random Views
-        const randomViews = Math.floor(Math.random() * 900 + 100) + 'k';
+        const card = document.createElement("div");
+        card.className = "card";
+        card.onclick = () => (window.location.href = `watch.html?id=${item.id}`);
 
-        const d = document.createElement("div");
-        d.className = "card";
-        d.innerHTML = `
+        card.innerHTML = `
             <div class="card-thumb-container">
-                <img 
-                    src="${v.thumbnailUrl}" 
-                    class="card-thumb" 
-                    loading="lazy"
-                    onerror="this.onerror=null; this.src='https://placehold.co/600x400/151525/FFF?text=No+Preview';"
-                >
-                <span class="duration-badge">${v.duration || '00:00'}</span>
+                <img src="${thumb}" class="card-thumb" onerror="this.src='https://placehold.co/600x400/1a1a24/FFF?text=No+Image'">
+                <span class="duration-badge">${item.duration || "00:00"}</span>
             </div>
             <div class="card-info">
-                <div class="card-title">${v.title}</div>
+                <div class="card-title">${item.title}</div>
                 <div class="card-meta">
-                    <span>${randomViews} views</span>
+                    <span>${item.views || '1k'} views</span>
                 </div>
             </div>
         `;
-        d.onclick = () => window.location.href = `watch.html?id=${v.id}`;
-        list.appendChild(d);
+        grid.appendChild(card);
     });
 }
 
