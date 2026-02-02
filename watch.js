@@ -1,36 +1,61 @@
-const VIDEO_FILE = "data.json";
+// LIST OF YOUR DATA FILES
+const DATA_FILES = [
+    "data/fuckmaza.json",
+    "data/bhojpuri.json",
+    "data/lol49.json"
+];
+
+// Get ID from URL
+const params = new URLSearchParams(window.location.search);
+const currentId = params.get("id");
 
 async function initWatch() {
-    // 1. Get ID from URL
-    const params = new URLSearchParams(window.location.search);
-    const currentId = params.get("id");
+    if (!currentId) { window.location.href = "index.html"; return; }
 
-    if (!currentId) {
-        window.location.href = "index.html";
-        return;
+    // SEO Canonical
+    let link = document.querySelector("link[rel='canonical']");
+    if (!link) {
+        link = document.createElement("link");
+        link.rel = "canonical";
+        document.head.appendChild(link);
     }
+    link.href = window.location.origin + "/watch.html?id=" + currentId;
 
     try {
-        // 2. Fetch Data
-        const res = await fetch(VIDEO_FILE);
-        if (!res.ok) throw new Error("Failed to load video file");
-        
-        const allVideos = await res.json();
-        
-        // 3. Find specific video
-        const video = allVideos.find(v => v.id === currentId);
+        let foundVideo = null;
+        let allVideos = [];
 
-        if (video) {
-            // Update UI
-            document.title = video.title + " - XSHIVER";
-            document.getElementById("title").innerText = video.title;
-            document.getElementById("description").innerText = video.description || `Watch ${video.title} on XSHIVER.`;
+        // 1. Loop through all files to find the video
+        for (const url of DATA_FILES) {
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+                
+                // Add to main list for suggestions later
+                allVideos = allVideos.concat(data);
 
-            // Update Tags
+                // Check if this file has our video
+                const match = data.find(v => v.id === currentId);
+                if (match) {
+                    foundVideo = match;
+                }
+            } catch (err) {
+                console.warn(`Could not load ${url}`, err);
+            }
+        }
+
+        // 2. If video found, render it
+        if (foundVideo) {
+            // UI & SEO
+            document.title = foundVideo.title + " - XSHIVER";
+            document.getElementById("title").innerText = foundVideo.title;
+            document.getElementById("description").innerText = foundVideo.description || `Watch ${foundVideo.title} on XSHIVER.`;
+
+            // Tags
             const tagBox = document.getElementById("tags");
             tagBox.innerHTML = "";
-            if (video.tags) {
-                video.tags.forEach(t => {
+            if (foundVideo.tags) {
+                foundVideo.tags.forEach(t => {
                     const s = document.createElement("span");
                     s.className = "tag-pill";
                     s.innerText = `#${t}`;
@@ -38,38 +63,60 @@ async function initWatch() {
                 });
             }
 
-            // Setup Standard Player
-            const player = document.getElementById("player");
-            if (player) {
-                player.src = video.embedUrl;
-                player.poster = video.thumbnailUrl;
-                player.load(); // Forces reload of source
-                // player.play().catch(() => {}); // Optional: Auto-play
-            }
+            // --- FLUID PLAYER SETUP (WITH VAST AD) ---
+            const playerVideoTag = document.getElementById("mainPlayer");
+            
+            // Set Source
+            playerVideoTag.innerHTML = `<source src="${foundVideo.embedUrl}" type="video/mp4" />`;
+            
+            // Initialize Player
+            fluidPlayer("mainPlayer", {
+                layoutControls: {
+                    fillToContainer: true, // Responsiveness
+                    posterImage: foundVideo.thumbnailUrl || '', 
+                    autoPlay: false, 
+                    playButtonShowing: true,
+                    playPauseAnimation: true,
+                    logo: {
+                        imageUrl: 'logo.svg', 
+                        position: 'top right',
+                        clickUrl: 'index.html',
+                        opacity: 0.8
+                    }
+                },
+                vastOptions: {
+                    adList: [
+                        {
+                            roll: 'preRoll', 
+                            vastTag: 'https://s.magsrv.com/v1/vast.php?idzone=5843716' // YOUR AD TAG
+                        }
+                    ]
+                }
+            });
+
+            // 3. Render Suggestions (from the collected videos)
+            renderRelated(foundVideo, allVideos);
 
         } else {
-            document.getElementById("title").innerText = "Video not found.";
+            document.getElementById("title").innerText = "Video not found in any database.";
         }
 
-        // 4. Load Suggestions
-        const suggestions = allVideos
-            .filter(v => v.id !== currentId)
-            .sort(() => 0.5 - Math.random())
-            .slice(0, 12);
-
-        renderSuggestions(suggestions);
-
     } catch (e) {
-        console.error("Error:", e);
+        console.error("Error loading videos:", e);
         document.getElementById("title").innerText = "Error loading content.";
     }
 }
 
-function renderSuggestions(list) {
+function renderRelated(current, all) {
     const grid = document.getElementById("related");
     if (!grid) return;
-    
     grid.innerHTML = "";
+
+    // Filter, Shuffle, and Slice
+    const list = all
+        .filter(v => v.id !== current.id)
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 10);
 
     list.forEach(item => {
         let thumb = item.thumbnailUrl;
