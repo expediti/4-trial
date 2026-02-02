@@ -1,4 +1,4 @@
-// LIST OF YOUR DATA FILES
+// LIST OF YOUR DATA FILES (Inside data folder)
 const DATA_FILES = [
     "data/fuckmaza.json",
     "data/bhojpuri.json",
@@ -63,26 +63,21 @@ async function initWatch() {
                 });
             }
 
-            // --- FLUID PLAYER SETUP (WITH VAST AD) ---
+            // --- FLUID PLAYER SETUP (FIXED) ---
             const playerVideoTag = document.getElementById("mainPlayer");
             
             // Set Source
             playerVideoTag.innerHTML = `<source src="${foundVideo.embedUrl}" type="video/mp4" />`;
             
             // Initialize Player
+            // NOTICE: I removed the 'logo' section so it won't cover your video!
             fluidPlayer("mainPlayer", {
                 layoutControls: {
-                    fillToContainer: true, // Responsiveness
+                    fillToContainer: true,
                     posterImage: foundVideo.thumbnailUrl || '', 
                     autoPlay: false, 
                     playButtonShowing: true,
-                    playPauseAnimation: true,
-                    logo: {
-                        imageUrl: 'logo.svg', 
-                        position: 'top right',
-                        clickUrl: 'index.html',
-                        opacity: 0.8
-                    }
+                    playPauseAnimation: true
                 },
                 vastOptions: {
                     adList: [
@@ -94,7 +89,7 @@ async function initWatch() {
                 }
             });
 
-            // 3. Render Suggestions (from the collected videos)
+            // 3. Render Suggestions
             renderRelated(foundVideo, allVideos);
 
         } else {
