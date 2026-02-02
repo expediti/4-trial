@@ -54,35 +54,38 @@ async function initWatch() {
             }
 
             // -------- FLUID PLAYER SETUP (WITH AD) ----------
-            const playerElement = document.getElementById("mainPlayer");
+            const playerVideoTag = document.getElementById("mainPlayer");
             
-            // 1. Set source manually first
-            playerElement.innerHTML = `<source src="${video.embedUrl}" type="video/mp4" />`;
-
+            // 1. Set source attributes directly
+            playerVideoTag.innerHTML = `<source src="${video.embedUrl}" type="video/mp4" />`;
+            
             // 2. Initialize Fluid Player
-            fluidPlayer("mainPlayer", {
-                layoutControls: {
-                    fillToContainer: true,
-                    posterImage: video.thumbnailUrl, // Video Thumbnail
-                    autoPlay: false, 
-                    playButtonShowing: true,
-                    playPauseAnimation: true,
-                    logo: {
-                        imageUrl: 'logo.svg', // Your logo inside player
-                        position: 'top right',
-                        clickUrl: 'index.html',
-                        opacity: 0.8
-                    }
-                },
-                vastOptions: {
-                    adList: [
-                        {
-                            roll: 'preRoll', // Play Ad before video
-                            vastTag: 'https://s.magsrv.com/v1/vast.php?idzone=5843716' // YOUR AD TAG
+            // We verify the element exists first to avoid errors
+            if (playerVideoTag) {
+                fluidPlayer("mainPlayer", {
+                    layoutControls: {
+                        fillToContainer: true,
+                        posterImage: video.thumbnailUrl || '', // Video Thumbnail
+                        autoPlay: false, 
+                        playButtonShowing: true,
+                        playPauseAnimation: true,
+                        logo: {
+                            imageUrl: 'logo.svg', 
+                            position: 'top right',
+                            clickUrl: 'index.html',
+                            opacity: 0.8
                         }
-                    ]
-                }
-            });
+                    },
+                    vastOptions: {
+                        adList: [
+                            {
+                                roll: 'preRoll', // Play Ad before video
+                                vastTag: 'https://s.magsrv.com/v1/vast.php?idzone=5843716' // YOUR AD TAG
+                            }
+                        ]
+                    }
+                });
+            }
 
         } else {
             document.getElementById("title").innerText = "Video not found.";
@@ -104,6 +107,8 @@ async function initWatch() {
 // ---------------- SUGGESTIONS ----------------
 function renderSuggestions(list) {
     const grid = document.getElementById("related");
+    if (!grid) return;
+    
     grid.innerHTML = "";
 
     list.forEach(item => {
