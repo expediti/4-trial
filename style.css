@@ -1,132 +1,89 @@
 /* =========================================
-   1. GLOBAL VARIABLES & RESET
+   1. VARIABLES & RESET (PRO THEME)
    ========================================= */
 :root {
     --bg: #0f0f13;
     --card-bg: #1a1a24;
     --text: #ffffff;
-    --accent: #ff0055;
-    --secondary: #888888;
+    --accent: #ff0055; /* Neon Pink/Red */
+    --secondary: #aaaaaa;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
-
-body {
-    background: var(--bg);
-    color: var(--text);
-    padding-bottom: 50px;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+body { background: var(--bg); color: var(--text); padding-bottom: 60px; }
 
 /* =========================================
    2. HEADER & LOGO
    ========================================= */
 header {
-    padding: 10px 15px;
     background: #000;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     border-bottom: 1px solid #333;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    height: 60px; /* Fixed height to prevent layout jumps */
+    position: sticky; top: 0; z-index: 100;
+    padding: 0 15px;
+    height: 60px;
+    display: flex; align-items: center;
 }
 
-/* Helper for Watch Page Header alignment */
-.header-content {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    width: 100%;
-    max-width: 1000px;
-    margin: 0 auto;
+.header-inner {
+    width: 100%; max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
 }
 
-/* LOGO STYLES */
-.logo-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    height: 100%;
-}
-
-.logo-img {
-    height: 40px; /* FIXED HEIGHT - Prevents logo from being huge */
-    width: auto;
-    object-fit: contain;
-}
+/* LOGO FIX */
+.logo-link { display: flex; align-items: center; height: 100%; }
+.logo-img { height: 40px; width: auto; object-fit: contain; }
 
 .search-bar input {
-    background: #222;
-    border: 1px solid #444;
-    padding: 8px 15px;
-    border-radius: 5px;
-    color: white;
-    outline: none;
-    width: 130px;
+    background: #222; border: 1px solid #444; padding: 8px 15px;
+    border-radius: 20px; color: white; outline: none; width: 140px;
 }
-@media(min-width: 768px) {
-    .search-bar input { width: 300px; }
-}
+@media(min-width: 768px) { .search-bar input { width: 300px; } }
 
 /* =========================================
-   3. VIDEO GRID (THE STAPLE LAYOUT)
+   3. GRID SYSTEM (2-Col Mobile)
    ========================================= */
 .video-grid {
     display: grid;
-    /* STRICT 2 COLUMNS ON MOBILE */
+    /* STRICT 2 COLUMNS ON PHONES */
     grid-template-columns: repeat(2, 1fr); 
-    gap: 10px;
-    padding: 10px;
+    gap: 10px; padding: 10px;
 }
 
 @media(min-width: 768px) {
     .video-grid {
-        /* ADAPTIVE DESKTOP */
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 20px;
-        padding: 20px;
+        gap: 20px; padding: 20px;
     }
 }
 
 /* =========================================
-   4. CARDS
+   4. CARDS (Pro Style)
    ========================================= */
 .card {
-    background: var(--card-bg);
-    border-radius: 8px;
-    overflow: hidden;
-    cursor: pointer;
-    text-decoration: none;
-    color: white;
-    display: block;
-    position: relative;
+    background: var(--card-bg); border-radius: 8px; overflow: hidden;
+    cursor: pointer; position: relative; display: block; text-decoration: none;
+    transition: transform 0.2s;
 }
+.card:hover { transform: translateY(-4px); }
 
 .thumb-box {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 16/9;
-    background: #000;
+    width: 100%; aspect-ratio: 16/9; background: #000; position: relative;
 }
+.thumb-box img { width: 100%; height: 100%; object-fit: cover; }
 
-.thumb-box img {
-    width: 100%; height: 100%; object-fit: cover; display: block;
-}
-
+/* DURATION BADGE */
 .duration {
     position: absolute; bottom: 5px; right: 5px;
-    background: rgba(0,0,0,0.85); padding: 2px 5px;
-    font-size: 10px; font-weight: bold; border-radius: 4px;
+    background: rgba(0,0,0,0.85); color: #fff;
+    padding: 2px 5px; font-size: 10px; font-weight: 700; border-radius: 4px;
 }
 
-/* AD LIVE BADGE */
+/* LIVE BADGE (For Ads) */
 .card-live-badge {
     position: absolute; top: 5px; right: 5px;
-    background: rgba(0,0,0,0.85); border: 1px solid var(--accent);
+    background: rgba(0,0,0,0.9); border: 1px solid var(--accent);
     color: var(--accent); padding: 2px 6px;
-    font-size: 10px; font-weight: 900; border-radius: 4px;
+    font-size: 9px; font-weight: 900; border-radius: 4px;
     display: flex; align-items: center; gap: 4px; z-index: 10;
 }
 .red-dot {
@@ -137,50 +94,33 @@ header {
 
 .info { padding: 10px; }
 .title {
-    font-size: 0.85rem; font-weight: 500;
+    font-size: 0.85rem; font-weight: 500; color: #fff;
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
     overflow: hidden; line-height: 1.3;
 }
 .views { font-size: 0.75rem; color: var(--secondary); margin-top: 5px; }
 
-/* Ad Text Color */
-.ad-card .title { color: var(--accent); font-weight: bold; }
+/* Ad specific title */
+.ad-card .title { color: var(--accent); font-weight: 700; }
 
 /* =========================================
-   5. WATCH PAGE & PAGINATION
+   5. WATCH PAGE & UTILS
    ========================================= */
-.content-wrapper {
-    width: 100%;
-    max-width: 1000px;
-    margin: 0 auto;
-}
+.content-wrapper { width: 100%; max-width: 1000px; margin: 0 auto; }
+.back-btn { text-decoration: none; color: #aaa; font-weight: bold; font-size: 0.9rem; }
 
-.player-container {
-    width: 100%;
-    background: black;
-    position: relative;
-}
-
-.video-player {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16/9;
-    display: block;
-}
+.player-container { width: 100%; background: black; }
+.video-player { width: 100%; height: auto; aspect-ratio: 16/9; display: block; }
 
 .video-info { padding: 15px; }
-.video-info h1 { font-size: 1.1rem; line-height: 1.4; margin-bottom: 5px; }
-.views-count { color: #ccc; font-size: 0.9rem; }
-.suggestions-label { padding: 10px 15px; font-weight: bold; }
+.video-info h1 { font-size: 1.1rem; line-height: 1.4; margin-bottom: 5px; font-weight: 600; }
 
-.back-btn { text-decoration: none; color: #aaa; font-weight: bold; }
-
-.pagination {
-    display: flex; justify-content: center; gap: 15px; margin: 30px 0;
-}
+.pagination { display: flex; justify-content: center; gap: 15px; margin: 30px 0; }
 .pagination button {
     background: var(--accent); color: white; border: none;
-    padding: 10px 20px; border-radius: 5px; font-weight: bold;
+    padding: 10px 18px; border-radius: 5px; font-weight: bold; cursor: pointer;
 }
-.pagination button:disabled { background: #333; opacity: 0.5; }
+.pagination button:disabled { background: #333; cursor: default; }
+
+.suggestions-label { padding: 10px 15px; font-weight: bold; color: #fff; }
 .loading { text-align: center; padding: 40px; color: #666; }
