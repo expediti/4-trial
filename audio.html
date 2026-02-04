@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>XSHIVER - Premium Audio Stories</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-top">
+            <a href="index.html" class="logo">
+                <img src="logo.svg" alt="XSHIVER" onerror="this.src='https://placehold.co/150x50/0a0a1a/00b4ff?text=XSHIVER'">
+            </a>
+            
+            <div class="header-actions">
+                <a href="pro.html" class="btn-pro">
+                    GET PRO
+                    <span>Bundle</span>
+                </a>
+                <button id="themeToggle" class="theme-btn">🌙</button>
+            </div>
+        </div>
+        <div style="padding: 10px; color: var(--accent); font-weight: bold; text-align: center; border-bottom: 1px solid var(--border);">
+            🎧 PREMIUM AUDIO STORIES
+        </div>
+    </header>
+
+    <main id="audioList">
+        </main>
+
+    <audio id="globalAudioPlayer" style="display:none;"></audio>
+
+    <footer>
+        <div class="social-links">
+            <a href="#">Instagram</a>
+            <a href="#">Telegram</a>
+        </div>
+        <p style="margin-top:10px; opacity:0.5;">&copy; 2026 XSHIVER AUDIO</p>
+    </footer>
+
+    <script>
+        const toggleBtn = document.getElementById('themeToggle');
+        const body = document.body;
+        if (localStorage.getItem('theme') === 'light') {
+            body.classList.add('light-mode');
+            toggleBtn.innerText = '☀️';
+        }
+        toggleBtn.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            const isLight = body.classList.contains('light-mode');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            toggleBtn.innerText = isLight ? '☀️' : '🌙';
+        });
+    </script>
+
+    <script src="audio.js"></script>
+</body>
+</html>
