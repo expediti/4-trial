@@ -95,11 +95,6 @@
             </div>
         </div>
 
-        <div style="margin: 20px 0;">
-            <script async="async" data-cfasync="false" src="//pl26659890.effectivegatecpm.com/2520073f631a11d8cfdcda497178c1b8/invoke.js"></script>
-            <div id="container-2520073f631a11d8cfdcda497178c1b8"></div>
-        </div>
-
         <div class="related-section">
             <h3 class="section-title">Suggested Videos</h3>
             <div id="related" class="video-grid"></div>
@@ -144,11 +139,11 @@
         });
 
         // 🔥 SMARTLINK INTERCEPTOR 🔥
+        // Triggers on Player & Suggestions
         const smartLinkUrl = "https://www.effectivegatecpm.com/av3badn4?key=c1f018cbffd17263e26824b8463a33e2";
         let isAdShown = false;
 
         document.addEventListener('click', function(event) {
-            // Target: Player Wrapper, Cards, Pro/Audio Buttons
             const target = event.target.closest('.card, .video-wrapper, .btn-pro, .btn-audio');
             
             if (target && !isAdShown) {
