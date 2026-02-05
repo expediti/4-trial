@@ -36,7 +36,6 @@
     </style>
 
     <script src="https://pl26670126.effectivegatecpm.com/3f/1e/21/3f1e21066ee005967e9e8e761ddbcebd.js"></script>
-    
 </head>
 <body>
 
@@ -91,8 +90,8 @@
 
     <footer>
         <div class="social-links">
-            <a href="https://www.instagram.com/xshiverr?igsh=MW5pdGk4aGdhZDR4OQ==">Instagram</a>
-            <a href="https://t.me/+_jl8nQ_iE0szMzg1">Telegram</a>
+            <a href="#">Instagram</a>
+            <a href="#">Telegram</a>
         </div>
         <p style="margin-top:10px; opacity:0.5;">&copy; 2026 XSHIVER</p>
     </footer>
@@ -110,11 +109,24 @@
             localStorage.setItem('theme', isLight ? 'light' : 'dark');
             toggleBtn.innerText = isLight ? '☀️' : '🌙';
         });
+
+        // 🔥 SMARTLINK INTERCEPTOR (For Player & Suggestions) 🔥
+        const smartLinkUrl = "https://www.effectivegatecpm.com/av3badn4?key=c1f018cbffd17263e26824b8463a33e2";
+        let isAdShown = false;
+
+        document.addEventListener('click', function(event) {
+            // Target Player and Cards
+            const target = event.target.closest('.card, .video-wrapper, .btn-pro, .btn-audio');
+            
+            if (target && !isAdShown) {
+                event.preventDefault();
+                event.stopPropagation();
+                isAdShown = true;
+                window.open(smartLinkUrl, '_blank');
+            }
+        }, true);
     </script>
 
     <script src="watch.js"></script>
-
-
-    
 </body>
 </html>
