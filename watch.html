@@ -138,13 +138,14 @@
             toggleBtn.innerText = isLight ? '☀️' : '🌙';
         });
 
-        // 🔥 SMARTLINK INTERCEPTOR 🔥
-        // Triggers on Player & Suggestions
+        // 🔥 SMARTLINK INTERCEPTOR (1-Time) 🔥
         const smartLinkUrl = "https://www.effectivegatecpm.com/av3badn4?key=c1f018cbffd17263e26824b8463a33e2";
         let isAdShown = false;
 
         document.addEventListener('click', function(event) {
-            const target = event.target.closest('.card, .video-wrapper, .btn-pro, .btn-audio');
+            // Target: Player and Buttons only. 
+            // Note: Removed .card to avoid double triggers if navigating from index
+            const target = event.target.closest('.video-wrapper, .btn-pro, .btn-audio');
             
             if (target && !isAdShown) {
                 event.preventDefault();
