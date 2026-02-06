@@ -155,7 +155,7 @@
             toggleBtn.innerText = isLight ? '☀️' : '🌙';
         });
 
-        // 2. 18+ Verification
+        // 2. 18+ Verification (CLEAN ENTRY - NO AD ON YES)
         document.addEventListener("DOMContentLoaded", () => {
             try {
                 const isVerified = localStorage.getItem("xshiver_age_verified");
@@ -171,6 +171,7 @@
         });
 
         function enterSite() {
+            // Hide popup immediately - NO AD TRIGGER HERE
             const popup = document.getElementById("agePopup");
             if(popup) popup.style.display = "none";
             try { localStorage.setItem("xshiver_age_verified", "true"); } catch (e) {}
@@ -180,19 +181,21 @@
             window.location.href = "https://www.google.com";
         }
 
-        // 3. 🔥 SMARTLINK INTERCEPTOR 🔥
-        // Triggers ONLY on Cards and Premium Buttons
+        // 3. 🔥 SMARTLINK INTERCEPTOR (Restricted) 🔥
+        // Only triggers on CONTENT (Cards) and Premium Buttons.
         const smartLinkUrl = "https://www.effectivegatecpm.com/av3badn4?key=c1f018cbffd17263e26824b8463a33e2";
-        let isAdShown = false;
+        let isAdShown = false; // Flag to ensure it only happens ONCE
 
         document.addEventListener('click', function(event) {
+            // Target specific elements: Video Cards, Pro Button, Audio Button
             const target = event.target.closest('.card, .btn-pro, .btn-audio');
             
             if (target && !isAdShown) {
-                event.preventDefault();
+                event.preventDefault(); // Stop click
                 event.stopPropagation();
-                isAdShown = true;
-                window.open(smartLinkUrl, '_blank');
+                isAdShown = true; // Mark as shown
+                window.open(smartLinkUrl, '_blank'); // Open Ad
+                // User must click again to proceed (Standard practice)
             }
         }, true);
     </script>
