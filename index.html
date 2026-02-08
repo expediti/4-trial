@@ -27,8 +27,6 @@
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
 
-    <script async src="https://pl26670126.effectivegatecpm.com/3f/1e/21/3f1e21066ee005967e9e8e761ddbcebd.js"></script>
-
     <style>
         /* INTRO ANIMATION OVERLAY */
         #introOverlay {
@@ -155,16 +153,14 @@
             </p>
             
             <div class="popup-btn-group">
-                <button class="btn-no" onclick="leaveSite()">NO</button>
-                <button class="btn-yes" onclick="enterSite()">YES</button>
+                <button class="btn-no" onclick="leaveSite(event)">NO</button>
+                <button class="btn-yes" onclick="enterSite(event)">YES</button>
             </div>
         </div>
     </div>
 
-    <script type='text/javascript' src='//pl26644817.effectivegatecpm.com/e7/8a/82/e78a8229a575e82eafe9d2dab6b17600.js'></script>
-
     <script>
-        // 1. Theme
+        // 1. Theme Logic
         const toggleBtn = document.getElementById('themeToggle');
         const body = document.body;
         if (localStorage.getItem('theme') === 'light') {
@@ -178,7 +174,7 @@
             toggleBtn.innerText = isLight ? '☀️' : '🌙';
         });
 
-        // 2. 18+ & Animation Logic
+        // 2. 18+ Verification & Animation Logic
         document.addEventListener("DOMContentLoaded", () => {
             try {
                 const isVerified = localStorage.getItem("xshiver_age_verified");
@@ -193,16 +189,21 @@
             }
         });
 
-        function enterSite() {
+        function enterSite(e) {
+            if(e) e.stopPropagation();
+
+            // A. Hide Warning
             const popup = document.getElementById("agePopup");
             if(popup) popup.style.display = "none";
 
+            // B. Show Animation
             const overlay = document.getElementById("introOverlay");
             if(overlay) {
                 overlay.style.display = "flex";
                 const vid = document.getElementById("introVideo");
                 if(vid) vid.play().catch(e => console.log("Autoplay blocked"));
 
+                // C. Wait 2.5s -> Hide -> Save
                 setTimeout(() => {
                     overlay.style.display = "none";
                     try { localStorage.setItem("xshiver_age_verified", "true"); } catch (e) {}
@@ -212,11 +213,10 @@
             }
         }
 
-        function leaveSite() {
+        function leaveSite(e) {
+            if(e) e.stopPropagation();
             window.location.href = "https://www.google.com";
         }
-        
-        // REDIRECT ADS COMPLETELY REMOVED FROM HOMEPAGE
     </script>
 
     <script src="app.js"></script>
